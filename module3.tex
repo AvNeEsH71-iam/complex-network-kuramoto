@@ -1,0 +1,267 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,
+            linkcolor=blue,
+            citecolor=blue,
+            urlcolor=blue,
+            pdfborder={0 0 0}]{hyperref}
+\usepackage{graphicx} % Required for inserting images
+\graphicspath{{./figures/}}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{parskip}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{subcaption}
+\parskip=\baselineskip
+\parindent=0pt
+\usepackage{lipsum} % For dummy text - remove in your actual document
+\usepackage[top=1in,bottom=1.2in,left=1in,right=1in]{geometry} % Adjust margins
+\usepackage{natbib}
+
+% Customize footer with elevated page number
+\pagestyle{fancy}
+\fancyhf{} % Clear existing headers/footers
+\fancyfoot[R]{\raisebox{5pt}{\thepage}} % Elevated page number (adjust 5pt as needed)
+\renewcommand{\headrulewidth}{0pt} % Remove header line
+\renewcommand{\footrulewidth}{0pt} % Remove footer line
+
+% Apply same style to plain pages (chapter starts)
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[R]{\raisebox{5pt}{\thepage}}
+}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{0.01cm} % Top margin adjustment
+    
+    \includegraphics[width=0.4\textwidth]{iisermlogo.png}\\
+    
+    \vspace{1.8cm} % Increased space after logo
+    
+    {\Huge\bfseries Module 3 : Coupled Map Lattice
+
+    \vspace{1.1cm}
+
+    \Large Course : IDC621 : Modelling Complex System\\
+    {\Large Instructor :\ {\href{https://web.iisermohali.ac.in/dept/physics/Sudeshna_Sinha.html}{Prof. Sudeshna Sinha}}\\
+
+    \vspace{\baselineskip}
+    Submitted by - 
+    Avneesh Singh (MS23249) }
+        
+    \vspace{1.8cm}
+    
+    {April 2 2026}
+
+    \vfill % Push following content to bottom
+    
+    \vspace{0.5cm}
+    
+\end{titlepage}
+
+\thispagestyle{empty} % No page number on title page
+
+\newpage
+
+%-----------------------------------
+\section{Introduction}
+
+In this project, we study a one-dimensional coupled map lattice (CML), which is a simple yet powerful model used to understand complex systems. 
+
+The idea is that each point (or site) in a lattice evolves in time according to some nonlinear rule, while also interacting with its neighboring sites. Even though the rules are simple, the system can show very rich behavior such as chaos, patterns, and synchronization.
+
+In our case, we use a circle map to describe the local dynamics and couple each site to its nearest neighbors.
+
+%-----------------------------------
+\section{Theory}
+
+The evolution equation for the system is given by:
+
+\begin{equation}
+\theta_{n+1}(i) = (1 - \epsilon) f(\theta_n(i)) + \frac{\epsilon}{2} \left[ f(\theta_n(i+1)) + f(\theta_n(i-1)) \right] \ \text{mod } 1
+\end{equation}
+
+where the local map is:
+
+\begin{equation}
+f(\theta) = \theta + \Omega - \frac{K}{2\pi} \sin(2\pi \theta)
+\end{equation}
+
+Here:
+\begin{itemize}
+    \item $\theta_n(i)$ is the value at site $i$ and time $n$
+    \item $\epsilon$ is the coupling strength
+    \item $\Omega$ is a driving parameter
+    \item $K$ controls nonlinearity
+\end{itemize}
+
+We use \textbf{periodic boundary conditions}, meaning the first and last sites are connected.
+
+%-----------------------------------
+\section{Methodology}
+
+We simulate a lattice of size $N = 100$ for $T = 200$ time steps. The parameters are chosen as:
+
+\begin{itemize}
+    \item $K = 1.0$
+    \item $\Omega = 0.2$
+    \item $\epsilon$ varied from $0.1$ to $0.8$
+\end{itemize}
+
+The initial values of $\theta$ are taken randomly between 0 and 1.
+
+At each time step:
+\begin{itemize}
+    \item The value of each site is updated using the equation
+    \item Neighboring sites are included using periodic boundary conditions
+    \item The result is taken modulo 1
+\end{itemize}
+
+The full evolution is stored and used for visualization.
+
+\section{Results}
+
+\subsection{Effect of Coupling Strength ($\epsilon$)}
+
+We studied the effect of coupling strength by varying $\epsilon$ from 0.1 to 0.9.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.1.png}
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.2.png}
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.3.png}
+
+\vspace{0.3cm}
+
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.4.png}
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.5.png}
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.6.png}
+
+\vspace{0.3cm}
+
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.7.png}
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.8.png}
+\includegraphics[width=0.32\linewidth]{heatmap_eps_0.9.png}
+
+\caption{Spatiotemporal evolution of the system for different values of coupling strength $\epsilon$.}
+\end{figure}
+\section{Analysis}
+
+From the heatmaps, we observe different types of behavior depending on the coupling strength $\epsilon$.
+
+For small $\epsilon$, the sites behave almost independently, leading to irregular and chaotic patterns.
+
+As $\epsilon$ increases, we begin to see the formation of spatial patterns. The system develops correlations between neighboring sites.
+
+For large $\epsilon$, the system becomes synchronized. This means all sites evolve in a similar way, which is visible as uniform bands in the heatmap.
+
+To quantify synchronization, we define the order parameter:
+
+\begin{equation}
+R = \left| \frac{1}{N} \sum_{i=1}^{N} e^{2\pi i \theta_i} \right|
+\end{equation}
+
+When $R \approx 1$, the system is synchronized. When $R \approx 0$, the system is disordered.
+
+The plot of $R$ shows that synchronization increases with coupling strength.
+
+The time evolution of a single site helps us understand whether the system is chaotic, periodic, or stable.
+
+
+\subsection{Order Parameter vs Coupling}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{order_parameter.png}
+\caption{Variation of order parameter $R$ with coupling strength $\epsilon$.}
+\end{figure}
+
+\subsection{Time Evolution of a Single Site}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{single_site.png}
+\caption{Time evolution of a single lattice site showing transition from chaos to synchronization.}
+\end{figure}
+
+\section{Analysis}
+
+From the heatmaps, we observe a clear transition in system behavior as the coupling strength $\epsilon$ is increased.
+
+For small $\epsilon$, each site evolves almost independently. This results in highly irregular and noisy patterns, indicating chaotic dynamics with no spatial correlation.
+
+As $\epsilon$ increases to intermediate values, spatial correlations begin to emerge. Neighboring sites start influencing each other, leading to the formation of structured patterns. This regime represents partial synchronization.
+
+For large $\epsilon$, the coupling dominates the dynamics. All sites begin to evolve together, resulting in synchronized behavior. This appears as uniform horizontal bands in the heatmaps.
+
+To quantify this behavior, we define the order parameter:
+
+\begin{equation}
+R = \left| \frac{1}{N} \sum_{i=1}^{N} e^{2\pi i \theta_i} \right|
+\end{equation}
+
+The value of $R$ lies between 0 and 1:
+\begin{itemize}
+    \item $R \approx 0$ indicates completely disordered motion
+    \item $R \approx 1$ indicates full synchronization
+\end{itemize}
+
+From the plot of $R$ vs $\epsilon$, we clearly observe that synchronization increases with coupling strength.
+
+Additionally, the time evolution of a single site provides insight into local dynamics. For small $\epsilon$, the time series is irregular, confirming chaotic behavior. As $\epsilon$ increases, the trajectory becomes smoother and eventually stabilizes, indicating synchronization.
+
+Thus, both visual (heatmaps) and quantitative (order parameter) analysis consistently show a transition from chaos to synchronization.
+
+%-----------------------------------
+\section{Conclusion}
+
+In this work, we studied a coupled map lattice with circle map dynamics. 
+
+We found that increasing the coupling strength leads to a transition from chaotic behavior to synchronized dynamics. This shows how simple local interactions can produce complex global behavior.
+
+%-----------------------------------
+\section{Appendix: Code}
+
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 100
+T = 200
+Omega = 0.2
+K = 1.0
+
+def f(theta):
+    return theta + Omega - (K/(2*np.pi))*np.sin(2*np.pi*theta)
+
+x = np.random.rand(N)
+data = [x.copy()]
+
+for t in range(T):
+    x_next = np.zeros(N)
+    for i in range(N):
+        x_next[i] = (1 - 0.3)*f(x[i]) + 0.3*(
+            f(x[(i-1)%N]) + f(x[(i+1)%N])
+        )/2
+        x_next[i] %= 1
+    x = x_next.copy()
+    data.append(x.copy())
+
+data = np.array(data)
+
+plt.imshow(data, aspect='auto')
+plt.colorbar()
+plt.savefig("heatmap.png")
+\end{lstlisting}
+
+\end{document}
